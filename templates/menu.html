@@ -1,0 +1,49 @@
+{% extends 'bootstrap/base.html' %}
+{% block content %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html,body{
+            font-family:monospace;
+        }
+        #box{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            padding: 10px;
+            background: rgb(250, 249, 249)
+        }
+        #outbound{
+            background:rgb(177, 208, 238);
+            border:1px solid;
+            padding:2px;
+            margin: 3px;
+            float: left;
+            border-radius: 4px;
+        }
+        #outbound:hover{
+            background:rgb(119, 151, 180);
+        }
+    </style>
+    <nav class="navbar navbar-light bg-light" style='background:black; border-radius:0px'>
+        <a class="navbar-brand" href="/">Kalculi</a>
+    </nav>
+    <div class = 'container'>
+    <div class = 'col-7'>
+    <br>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-info" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <h1>{{title}}</h1>
+    <div id='box'>
+    {% for tool in tools %}
+    <div class="alert alert-info" role="alert" style="float:left; margin:4px;">
+        <h4>
+            <a href="{{tools[tool]}}">{{ tool }}</a>
+        </h4>
+    </div>
+    {% endfor %}
+    </div></div></div>
+{% endblock %}
