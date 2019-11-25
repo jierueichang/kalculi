@@ -87,8 +87,8 @@ def polyfact_try_candidates(combos,cl):
     print(recreated_eq)
     for i in combos:
         x = float(eval(i))
-        print(x)
-        print(eval(recreated_eq))
+        print x
+        print eval(recreated_eq)
         if eval(recreated_eq)==0: zeros.append(i)
         x = -x
         if eval(recreated_eq)==0: zeros.append('-'+i)
@@ -115,11 +115,14 @@ def gencalc():
     fields = ['Expression','Variable Value (optional)']
     if request.method == 'POST':
         exp = str(request.form['Expression'])
-        try: x = float(request.form['Variable Value (optional)'])
-        except: pass
-        ans = eval(exp)
-        return render_template('calc.html',fields = fields, answer = ans, title = 'Basic Calculation')
-    return render_template('calc.html',fields = fields, answer = '', title = 'Basic Calculation')
+        try:
+            x = float(request.form['Variable Value (optional)'])
+            ans = eval(exp)
+        except: 
+            ans=''
+            graph = True
+        return render_template('calc.html',fields = fields, answer = ans, title = 'Basic Calculation', graph=graph, exp=exp)
+    return render_template('calc.html',fields = fields, answer = '', title = 'Basic Calculation', graph=False)
 
 @app.route('/factor',methods=['GET','POST'])
 def factorpage():
