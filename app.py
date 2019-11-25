@@ -68,19 +68,46 @@ def foil(cd):
             fin += ' + '
     return fin
 
-@app.route('/e',methods=['GET','POST'])
-def egg():
-    fields=['yes/no']
-    if request.method == 'POST':
-        if request.form['yes/no'] == 'yes':
-            return render_template('calc.html',title='Is QQ Cute?',fields=fields, answer="That's what I thought.")
-        elif request.form['yes/no'] == 'no':
-            return render_template('calc.html',title='Is QQ Cute?',fields=fields, answer="Oh, really?")
-    return render_template('calc.html',title='Is QQ Cute?',fields=fields, answer="")
+def polyfact_calc_all_combinations(f1,f2):
+    combinations = []
+    for i in f1:
+        for j in f2:
+            if j%i==0:
+                combinations.append(str(j/i))
+            else:
+                combinations.append(str(j)+'/'+str(i))
+    return combinations
+
+def polyfact_try_candidates(combos,cl):
+    zeros = []
+    recreated_eq = ''
+    for j in range(len(cl)):
+        recreated_eq+='('+str(cl[j])+')*x**('+str(len(cl)-j-1)+')+'
+    recreated_eq=recreated_eq[:-1]
+    print(recreated_eq)
+    for i in combos:
+        x = float(eval(i))
+        print x
+        print eval(recreated_eq)
+        if eval(recreated_eq)==0: zeros.append(i)
+        x = -x
+        if eval(recreated_eq)==0: zeros.append('-'+i)
+    return zeros
 
 @app.route('/')
 def index():
-    tools = {'Basic Calculation':'/basic','Factor Expansion':'/foil','Factoring':'/factor','Sequences':'/seq','Series':'/series'}
+    tools = [{'Basic Calculation':'/basic'},
+             {'Polynomial Root Finder':'/polyfact',
+             'Factor Expansion':'/foil',
+             'Factoring':'/factor'},
+             {'Arithmetic Series':'/arithseries',
+             'Geometric Series':'/geoseries',
+             'Convergent Geometric Sequences':'/congeoseq'},
+             {'Arithmetic Sequences':'/arithseq',
+             'Geometric Sequences':'/geoseq'
+             }]
+             #'Sequences':'/seq',
+             #'Series':'/series'}
     return render_template('index.html',tools = tools)
 
 @app.route('/basic',methods=['GET','POST'])
@@ -122,15 +149,32 @@ def foilpage():
         return render_template('calc.html', title = 'Factor Expansion', fields = fields, answer = exp)
     return render_template('calc.html', title = 'Factor Expansion', fields = fields, answer = '')
 
-@app.route('/seq')
-def seqmenu():
-    tools = {'Arithmetic Sequences':'/arithseq','Geometric Sequences':'/geoseq'}
-    return render_template('menu.html',title='Sequences',tools = tools)
+@app.route('/polyfact',methods=['GET','POST'])
+def polyfact():
+    fields = ['Coefficients of Polynomial']
+    if request.method == 'POST':
+        coefficients = request.form['Coefficients of Polynomial'].split(' ')
+        for i in coefficients:
+            i = float(str(i))
+        lc = coefficients[0]
+        ct = coefficients[-1]
+        f1 = factor(float(lc))
+        f2 = factor(float(ct))
+        combos = polyfact_calc_all_combinations(f1,f2)
+        ans = 'Candidates: '+str(combos).strip('[]')
+        ans += '<br>Roots: '+str(polyfact_try_candidates(combos,coefficients))
+        return render_template('calc.html', title = 'Polynomial Root Finder', fields = fields, answer = ans)
+    return render_template('calc.html', title = 'Factor Expansion', fields = fields, answer = '')
 
-@app.route('/series')
-def seriesmenu():
-    tools = {'Arithmetic Series':'/arithseries','Geometric Series':'/geoseries','Convergent Geometric Series':'/congeoseries'}
-    return render_template('menu.html',title='Series',tools = tools)
+@app.route('/e',methods=['GET','POST'])
+def egg():
+    fields=['yes/no']
+    if request.method == 'POST':
+        if request.form['yes/no'] == 'yes':
+            return render_template('calc.html',title='Is QQ Cute?',fields=fields, answer="That's what I thought.")
+        elif request.form['yes/no'] == 'no':
+            return render_template('calc.html',title='Is QQ Cute?',fields=fields, answer="Oh, really?")
+    return render_template('calc.html',title='Is QQ Cute?',fields=fields, answer="")
 
 @app.route('/arithseq')
 def arithseq():
