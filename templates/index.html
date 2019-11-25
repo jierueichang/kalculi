@@ -41,7 +41,11 @@
     {% for section in tools %}
     <div id='box'>
     {% for tool in section %}
-    <button type="button" class="btn btn-outline-info" style="float:left; margin:4px;">{{ tool }}</button>
+    <div class="alert alert-info" role="alert" style="float:left; margin:4px;">
+        <h4>
+            <a href="{{section[tool]}}">{{ tool }}</a>
+        </h4>
+    </div>
     {% endfor %}
         </div>
         <br>
