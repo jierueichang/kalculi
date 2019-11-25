@@ -118,8 +118,12 @@ def gencalc():
         try:
             x = float(request.form['Variable Value (optional)'])
             ans = eval(exp)
+            graph = False
         except: 
-            ans=''
+            try:
+                ans= eval(exp)
+            except:
+                ans = ''
             graph = True
         return render_template('calc.html',fields = fields, answer = ans, title = 'Basic Calculation', graph=graph, exp=exp)
     return render_template('calc.html',fields = fields, answer = '', title = 'Basic Calculation', graph=False)
