@@ -87,8 +87,8 @@ def polyfact_try_candidates(combos,cl):
     print(recreated_eq)
     for i in combos:
         x = float(eval(i))
-        print x
-        print eval(recreated_eq)
+        print(x)
+        print(eval(recreated_eq))
         if eval(recreated_eq)==0: zeros.append(i)
         x = -x
         if eval(recreated_eq)==0: zeros.append('-'+i)
