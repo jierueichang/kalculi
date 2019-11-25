@@ -37,16 +37,19 @@
     {% endif %}
     {% endwith %}
     <h1>Kalculi</h1>
-
+    <br>
+    {% for section in tools %}
     <div id='box'>
-    {% for tool in tools %}
+    {% for tool in section %}
     <div class="alert alert-info" role="alert" style="float:left; margin:4px;">
         <h4>
-            <a href="{{tools[tool]}}">{{ tool }}</a>
+            <a href="{{section[tool]}}">{{ tool }}</a>
         </h4>
     </div>
     {% endfor %}
-    </div>
+        </div>
+        <br>
+    {% endfor %}
 </div>
 </div>
 <br>
