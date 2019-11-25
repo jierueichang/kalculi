@@ -1,5 +1,8 @@
 {% extends 'bootstrap/base.html' %}
 {% block content %}
+    <script src="https://unpkg.com/mathjs@6.2.5/dist/math.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-1.35.2.min.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         html,body{
@@ -30,5 +33,41 @@
     </form>
     <br>
     <p style='background:rgb(245,245,245);font-size:20px'>{{ answer|safe }}</p>
+    {% if graph %}
+    <div id="plot" style='background:rgb(245,245,245)'></div>
+    <script>
+        function draw() {
+            try {
+            // compile the expression once
+            const expression = '{{ exp|safe }}'
+            const expr = math.compile(expression)
+
+            // evaluate the expression repeatedly for different values of x
+            const xValues = math.range(-50, 10, 0.1).toArray()
+            const yValues = xValues.map(function (x) {
+                return expr.evaluate({x: x})
+            })
+
+            // render the plot using plotly
+            const trace1 = {
+                x: xValues,
+                y: yValues,
+                type: 'scatter'
+            }
+            var layout = {
+                title: 'Output',
+                font: {size: 13}
+                };
+            const data = [trace1]
+            Plotly.newPlot('plot', data, layout, {responsive: true});
+            }
+            catch (err) {
+            console.error(err)
+            alert(err)
+            }
+        }
+        draw()
+    </script>
+    {% endif %}
     </div></div>
 {% endblock %}
