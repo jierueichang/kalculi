@@ -68,6 +68,16 @@ def foil(cd):
             fin += ' + '
     return fin
 
+@app.route('/e',methods=['GET','POST'])
+def egg():
+    fields=['yes/no']
+    if request.method == 'POST':
+        if request.form['yes/no'] == 'yes':
+            return render_template('calc.html',title='Is QQ Cute?',fields=fields, answer="That's what I thought.")
+        elif request.form['yes/no'] == 'no':
+            return render_template('calc.html',title='Is QQ Cute?',fields=fields, answer="Oh, really?")
+    return render_template('calc.html',title='Is QQ Cute?',fields=fields, answer="")
+
 @app.route('/')
 def index():
     tools = {'Basic Calculation':'/basic','Factor Expansion':'/foil','Factoring':'/factor','Sequences':'/seq','Series':'/series'}
