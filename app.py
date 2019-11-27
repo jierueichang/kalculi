@@ -114,7 +114,7 @@ def index():
 def gencalc():
     fields = ['Expression','Variable Value (optional)']
     if request.method == 'POST':
-        exp = str(request.form['Expression'])
+        exp = str(request.form['Expression']).replace('^','**')
         try:
             x = float(request.form['Variable Value (optional)'])
             ans = eval(exp)
